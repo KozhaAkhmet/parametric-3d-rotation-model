@@ -7,12 +7,11 @@ public class Controller : MonoBehaviour
 {
     public Transform[] points;
     [Range(0.1f, 20f)] public float speed;
-    [SerializeField] private float radiusX;
-    [SerializeField] private float radiusY;
-    [SerializeField] private float transposeX;
-    [SerializeField] private float transposeY;
-    [SerializeField] private float height;
-    [SerializeField] private bool activateTrail = true;
+    [SerializeField] public float radiusX;
+    [SerializeField] public float radiusY;
+    [SerializeField] public float transposeX;
+    [SerializeField] public float transposeY;
+    [SerializeField] public float height;
 
 
     private float iteration = 0;
@@ -21,19 +20,10 @@ public class Controller : MonoBehaviour
     Vector2 tempShift = Vector3.zero;
     Vector2 shiftedPos;
 
-    void Start()
-    {
-        foreach (var point in points)
-        {
-            point.transform.gameObject.GetComponent<TrailRenderer>().enabled = activateTrail;
-        }
-    }
-
     void Update()
     {
         foreach (var point in points)
         {
-            //point.transform.gameObject.GetComponent<TrailRenderer>().enabled = activateTrail;
 
             currentPos = new Vector2(radiusX * Mathf.Cos((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeX,
                                                    radiusY * Mathf.Sin((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeY
