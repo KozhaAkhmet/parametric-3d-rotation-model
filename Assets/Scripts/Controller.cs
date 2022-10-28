@@ -19,31 +19,57 @@ public class Controller : MonoBehaviour
     Vector2 temp = Vector3.zero;
     Vector2 tempShift = Vector3.zero;
     Vector2 shiftedPos;
+    LineRenderer lineRenderer;
+    int index = 0;  
 
-    void Update()
+    private void Start()
     {
+        lineRenderer = GetComponent<LineRenderer>();
+
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.red;
+
+        lineRenderer.startWidth = 0.08f;
+        lineRenderer.endWidth = 0.08f;
+    }
+
+    private void Update()
+    {
+        Gizmos.color = Color.red;
         foreach (var point in points)
         {
 
             currentPos = new Vector2(radiusX * Mathf.Cos((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeX,
                                                    radiusY * Mathf.Sin((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeY
                                                    );
-            
-            Debug.DrawLine(temp, currentPos, Color.red);
+
+            lineRenderer.SetPosition(index++, temp);
+            lineRenderer.SetPosition(index++, currentPos);
+
             temp = currentPos;
 
             shiftedPos = currentPos + new Vector2(0, height);
 
-            Debug.DrawLine(tempShift, shiftedPos, Color.red);
+            lineRenderer.SetPosition(index++, tempShift);
+            lineRenderer.SetPosition(index++, shiftedPos);
+
 
             tempShift = shiftedPos;
             point.transform.position = currentPos;
 
-            Debug.DrawLine(currentPos, shiftedPos, Color.red);
+            //if (!(index % 4 == 0))
+            //{
+                lineRenderer.SetPosition(index++, currentPos);
+                lineRenderer.SetPosition(index++, shiftedPos);
+            //}
 
             point.transform.position = shiftedPos;
 
             iteration += ((360 / points.Length) * Mathf.PI) / 180;
+
+            Debug.Log(index);
+            if(index >= 24) index = 0;
+            
 
             //You can add an delay here to improve performance.
         }
