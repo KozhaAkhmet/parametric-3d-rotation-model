@@ -35,4 +35,8 @@ public class UI : MonoBehaviour
         Destroy(points[0]);
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
