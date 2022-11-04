@@ -2340,6 +2340,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4349835521264777941, guid: c2f4de6cb594d9a4fb3d5d10e2a2b2f2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 4349835521264777944, guid: c2f4de6cb594d9a4fb3d5d10e2a2b2f2, type: 3}
       propertyPath: m_Name
       value: Circle (3)

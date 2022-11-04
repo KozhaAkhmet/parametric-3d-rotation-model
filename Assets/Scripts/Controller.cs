@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class Controller : MonoBehaviour
 {
-    public Transform[] points;
+    GameObject[] points;
     [Range(0.1f, 20f)] public float speed;
     [SerializeField] public float radiusX;
     [SerializeField] public float radiusY;
@@ -31,11 +31,16 @@ public class Controller : MonoBehaviour
 
         lineRenderer.startWidth = 0.08f;
         lineRenderer.endWidth = 0.08f;
+        
+
+        points = GameObject.FindGameObjectsWithTag("Point");
     }
 
     private void Update()
     {
         Gizmos.color = Color.red;
+        points = GameObject.FindGameObjectsWithTag("Point");
+        lineRenderer.positionCount = points.Length * 6;
         foreach (var point in points)
         {
 
@@ -68,7 +73,7 @@ public class Controller : MonoBehaviour
             iteration += ((360 / points.Length) * Mathf.PI) / 180;
 
             Debug.Log(index);
-            if(index >= 24) index = 0;
+            if(index >= lineRenderer.positionCount) index = 0;
             
 
             //You can add an delay here to improve performance.

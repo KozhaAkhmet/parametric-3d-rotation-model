@@ -7,6 +7,7 @@ public class UI : MonoBehaviour
 {
     public Slider[] sliders;
     public Controller controller;
+    public GameObject pointPrefab;
 
     void Start()
     {
@@ -22,4 +23,16 @@ public class UI : MonoBehaviour
         controller.transposeY = sliders[4].value;
         controller.height = sliders[5].value;
     }
+
+    public void AddPoint()
+    {
+        Instantiate(pointPrefab);
+    }
+
+    public void RemovePoint()
+    {
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Point");
+        Destroy(points[0]);
+    }
+
 }
