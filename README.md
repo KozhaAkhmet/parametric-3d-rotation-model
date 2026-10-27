@@ -1,46 +1,41 @@
 # parametric-3d-rotation-model
-An interactive User interface that can display 3d rotation of different symmetric gemetrical shapes by using only line segment. 
- 
-![ezgif-4-06035d0b69](https://user-images.githubusercontent.com/80167990/198712847-6d5245a4-56ed-4d81-9061-4c02938182f0.gif)
 
-# Code
+An interactive Unity interface that displays the 3D rotation of symmetric geometrical shapes using only line segments — no meshes, just a `LineRenderer` driven by parametric equations.
 
-```C#
-   foreach (var point in points)
-        {
+![demo](https://user-images.githubusercontent.com/80167990/198712847-6d5245a4-56ed-4d81-9061-4c02938182f0.gif)
 
-            currentPos = new Vector2(radiusX * Mathf.Cos((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeX,
-                                     radiusY * Mathf.Sin((float)(Time.timeSinceLevelLoad * speed + iteration)) + transposeY
-                                                   );
+## Controls
 
-            lineRenderer.SetPosition(index++, temp);
-            lineRenderer.SetPosition(index++, currentPos);
+The scene (`Assets/Scenes/main.unity`) exposes a set of sliders (wired up in `UI.cs`) that drive the shape live:
 
-            temp = currentPos;
+| Slider | Effect |
+| ------ | ------ |
+| Speed | Rotation speed |
+| Radius X / Radius Y | Ellipse radii of each point's orbit (equal values give a circle, unequal give an ellipse) |
+| Transpose X / Transpose Y | Shifts the center of rotation |
+| Height | Vertical offset used to draw the "extruded" second ring, giving the shape depth |
 
-            shiftedPos = currentPos + new Vector2(0, height);
+`Add Point` / `Remove Point` buttons spawn or destroy `Point` GameObjects at runtime — the more points, the more sides the resulting rotating polygon has.
 
-            lineRenderer.SetPosition(index++, tempShift);
-            lineRenderer.SetPosition(index++, shiftedPos);
+## How It Works
 
+`Controller.cs` runs every point tagged `"Point"` through the same parametric equation each frame:
 
-            tempShift = shiftedPos;
-            point.transform.position = currentPos;
-
-            
-            lineRenderer.SetPosition(index++, currentPos);
-            lineRenderer.SetPosition(index++, shiftedPos);
-            
-
-            point.transform.position = shiftedPos;
-
-            iteration += ((360 / points.Length) * Mathf.PI) / 180;
-
-            Debug.Log(index);
-            if(index >= 24) index = 0;
-            
-
-            //You can add an delay here to improve performance.
-        }
-
+```csharp
+currentPos = new Vector2(
+    radiusX * Mathf.Cos(Time.timeSinceLevelLoad * speed + iteration) + transposeX,
+    radiusY * Mathf.Sin(Time.timeSinceLevelLoad * speed + iteration) + transposeY
+);
 ```
+
+Each point gets its own constant phase offset (`iteration`, spaced evenly around `360° / points.Length`), so together they trace a rotating regular polygon inscribed in an ellipse. A second position, `shiftedPos`, is the same point offset vertically by `height`; connecting `currentPos` → `shiftedPos` for every point turns the flat rotating polygon into a wireframe 3D prism, all drawn through a single shared `LineRenderer`.
+
+## Tech Stack
+
+- Unity, C# (`Assets/Scripts/Controller.cs`, `Assets/Scripts/UI.cs`)
+- Built-in `LineRenderer` + `ShaderLab`/HLSL for rendering
+- TextMesh Pro for UI text
+
+## License
+
+MIT — see [LICENSE](LICENSE).
